@@ -1,0 +1,43 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #f0f0f0;
+  text-align: center;
+  padding: 20px 0;
+}
+
+main {
+  padding: 20px;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+.arabic-text {
+  font-size: 1.2em;
+  line-height: 1.8;
+  text-align: right; /* Arabic text is usually right-aligned */
+}
+
+.translation{
+  font-size: 1.0em;
+  line-height: 1.6;
+}
+
+footer {
+  background-color: #e0e0e0;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  main {
+    padding: 10px;
+  }
+}
