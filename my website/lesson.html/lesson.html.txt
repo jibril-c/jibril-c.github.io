@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lessons from the Three Quls</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html">Back to Home</a>
+            <h1>Lessons from the Three Quls</h1>
+        </header>
+        <main>
+            <section>
+                <h2>Seeking Refuge in Allah</h2>
+                <p>
+                    These Surahs teach us to seek refuge in Allah from all kinds of evil. It's like having a superhero protector! When we feel scared or worried, we can ask Allah to keep us safe.
+                </p>
+            </section>
+            <section>
+                <h2>The Oneness of Allah</h2>
+                <p>
+                    Surah Al-Ikhlas reminds us that Allah is one and unique. There's no one like Him! This helps us focus our worship on Allah alone.
+                </p>
+            </section>
+            <section>
+                <h2>Protection from Hidden Evils</h2>
+                <p>
+                    Surah Al-Falaq teaches us to seek protection from hidden evils, like the darkness of night or the whispers of jealousy. It's like having a shield against things we can't always see.
+                </p>
+            </section>
+            <p><a href="index.html">Back to the Three Quls</a></p>
+        </main>
+    </div>
+</body>
+</html>
