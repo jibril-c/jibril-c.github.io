@@ -1,73 +1,70 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f8f0;
+    background-color: #f4f4f4; /* Light gray background */
     color: #333;
     direction: rtl;
+    line-height: 1.6;
 }
 
 .container {
     width: 80%;
-    margin: 20px auto;
+    max-width: 960px;
+    margin: 30px auto;
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 header {
     text-align: center;
-    padding-bottom: 20px;
+    padding-bottom: 30px;
     border-bottom: 1px solid #eee;
-    color: #28a745;
+    color: #27ae60; /* A professional green */
 }
 
 main {
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
 .surah {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #d4edda;
-    background-color: #e8f5e9;
-    border-radius: 5px;
+    margin-bottom: 30px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    background-color: #f9f9f9;
+    border-radius: 8px;
 }
 
 .surah h2 {
-    color: #28a745;
+    color: #27ae60;
     text-align: center;
+    margin-bottom: 15px;
 }
 
 .arabic {
-    font-size: 1.2em;
+    font-size: 1.3em;
     line-height: 2;
     text-align: center;
     color: #008000;
+    margin-bottom: 15px;
 }
 
 .translation {
-    font-size: 1em;
-    line-height: 1.6;
+    font-size: 1.1em;
+    line-height: 1.8;
     text-align: left;
+    color: #555;
+    margin-bottom: 20px;
 }
 
 .tafsir {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
 }
 
 .tafsir h3 {
-  color: #28a745;
-  text-align: center;
-}
-
-footer {
-    text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-    color: #6c757d;
-}
+    color: #27ae60;
+    text-align:
