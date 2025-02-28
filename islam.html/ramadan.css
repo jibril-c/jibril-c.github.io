@@ -1,0 +1,31 @@
+body {
+  background-color: #FFF9E6; /* A soft, creamy background */
+  font-family: sans-serif; /* A simple, easy-to-read font */
+  margin: 0; /* No extra space around the body */
+  padding: 0; /* No extra space inside the body */
+  text-align: center; /* Center everything on the page */
+}
+
+.h1 {
+  color: #8B4513; /* A warm, earthy brown for titles */
+  padding: 20px; /* Space around the title */
+  background-color: #FCE6C9; /* A slightly darker cream for contrast */
+}
+
+.p {
+  color: #333; /* A dark gray for paragraphs, easy on the eyes */
+  padding: 10px; /* Space around the paragraphs */
+  margin: 20px; /* Space between paragraphs */
+}
+
+.a {
+  color: #D2691E; /* A warm, orange-brown for links */
+  text-decoration: none; /* No underline on links */
+  padding: 5px 10px; /* Space around the link text */
+  background-color: #FFE4B5; /* A light yellow for link backgrounds */
+  border-radius: 5px; /* Rounded corners for links */
+}
+
+a:hover {
+  background-color: #FFDAB9; /* A slightly darker yellow when you hover */
+}
