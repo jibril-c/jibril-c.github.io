@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Five Pillars of Islam</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>The Five Pillars of Islam</h1>
+        <section class="pillar">
+            <h2>1. Shahada (Declaration of Faith)</h2>
+            <p>Believing that "There is no god but Allah, and Muhammad is his messenger."</p>
+        </section>
+        <section class="pillar">
+            <h2>2. Salat (Prayer)</h2>
+            <p>Performing five daily prayers facing the Kaaba in Mecca.</p>
+        </section>
+        <section class="pillar">
+            <h2>3. Zakat (Charity)</h2>
+            <p>Giving a portion of one's wealth to the poor and needy.</p>
+        </section>
+        <section class="pillar">
+            <h2>4. Sawm (Fasting)</h2>
+            <p>Abstaining from food and drink from dawn to sunset during Ramadan.</p>
+        </section>
+        <section class="pillar">
+            <h2>5. Hajj (Pilgrimage)</h2>
+            <p>Making a pilgrimage to Mecca, if physically and financially able.</p>
+        </section>
+    </div>
+</body>
+</html>
