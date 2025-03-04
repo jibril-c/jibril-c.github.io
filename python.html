@@ -1,0 +1,48 @@
+import sqlite3
+
+# Connect to the database
+conn = sqlite3.connect('quran.db')
+cursor = conn.cursor()
+
+# --- 1. Add Data ---
+def add_data():
+    with open('arabic.txt', 'r', encoding='utf-8') as arabic_file, \
+         open('translation.txt', 'r', encoding='utf-8') as translation_file:
+
+        for arabic_line, translation_line in zip(arabic_file, translation_file):
+            arabic_parts = arabic_line.strip().split('|')
+            translation_parts = translation_line.strip().split('|')
+
+            if len(arabic_parts) == 3 and len(translation_parts) == 2:
+                surah_id = arabic_parts[0].strip()
+                ayah_number = arabic_parts[1].strip()
+                arabic_text = arabic_parts[2].strip()
+                translation_text = translation_parts[1].strip()
+
+                cursor.execute('''
+                    INSERT INTO Ayahs (surah_id, ayah_number, ayah_text_arabic, ayah_text_english)
+                    VALUES (?, ?, ?, ?)
+                ''', (surah_id, ayah_number, arabic_text, translation_text))
+            else:
+                print(f"Skipping line: {arabic_line.strip()} or {translation_line.strip()}")
+
+    conn.commit()
+    print("Data added successfully!")
+
+# --- 2. Read and Display Data ---
+def display_data():
+    cursor.execute('SELECT * FROM Ayahs')
+    rows = cursor.fetchall()
+
+    for row in rows:
+        surah_id, ayah_number, arabic_text, translation_text = row
+        print(f"Surah: {surah_id}, Ayah: {ayah_number}")
+        print(f"Arabic: {arabic_text}")
+        print(f"Translation: {translation_text}\n")
+
+# --- Main ---
+add_data()  # Add data to the database
+display_data()  # Read and display data
+
+# Close the connection
+conn.close()
