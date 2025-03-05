@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quran Verse Search</title>
   <style>
-    /* Background styling with Ramadan vibes */
+    /* General background and body styles */
     body {
       font-family: 'Scheherazade New', serif;
-      background: linear-gradient(to bottom, #191970, #2e8b57);
+      background: linear-gradient(to bottom, #4B0082, #2e8b57); /* Deep purple to green */
       color: #fff8dc;
       margin: 0;
       text-align: center;
@@ -24,8 +24,8 @@
     }
 
     .moon {
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       background: url('https://image.shutterstock.com/image-vector/vector-illustration-half-moon-graphic-260nw-1045203430.jpg') no-repeat center center;
       background-size: contain;
       border-radius: 50%;
@@ -45,22 +45,22 @@
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-top: 20px;
     }
 
     /* Input and button styling */
     #search-container {
-      margin-top: 20px;
+      margin-top: 40px;
       padding: 20px;
     }
 
     #search-input {
       padding: 10px;
       font-size: 1.2rem;
-      width: 250px;
+      width: 300px;
       border: 2px solid #fff;
-      border-radius: 5px;
+      border-radius: 10px;
     }
 
     #search-container button {
@@ -70,7 +70,7 @@
       background-color: #2e8b57;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
     }
 
     /* Comment section styling */
@@ -119,6 +119,38 @@
     .comment-button {
       cursor: pointer;
       color: blue;
+    }
+
+    /* Styling for login/signup */
+    #auth-section {
+      margin-top: 30px;
+      padding: 20px;
+    }
+
+    #auth-section input {
+      padding: 10px;
+      margin: 10px;
+      width: 300px;
+      font-size: 1rem;
+      border: 2px solid #fff;
+      border-radius: 10px;
+    }
+
+    #auth-section button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 10px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 50px;
+      font-size: 1rem;
+      color: #fff8dc;
+      text-align: center;
     }
   </style>
 
@@ -171,6 +203,10 @@
   </div>
 
   <button id="comment-toggle" class="comment-button" onclick="toggleComments()">Show Comments</button>
+
+  <footer>
+    <p>Developed with love for the Quran</p>
+  </footer>
 
   <script>
     const encryptionKey = "yourSecretKey"; // Keep this key secure!
@@ -260,16 +296,34 @@
       document.getElementById('comment-textarea').value = ''; // Clear textarea
     }
 
+    // Email validation for Gmail
+    function validateEmail(email) {
+      const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+      return regex.test(email);
+    }
+
     // Login and signup functions (basic client-side validation)
     function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+
+      if (!validateEmail(email)) {
+        alert("Please enter a valid Gmail address.");
+        return;
+      }
+
       alert(`Login successful for ${email}`);
     }
 
     function signup() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+
+      if (!validateEmail(email)) {
+        alert("Please enter a valid Gmail address.");
+        return;
+      }
+
       alert(`Sign up successful for ${email}`);
     }
 
@@ -278,4 +332,5 @@
   </script>
 </body>
 </html>
+
 
