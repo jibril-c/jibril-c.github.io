@@ -1,166 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quran Verse Search</title>
   <style>
     body {
       font-family: 'Scheherazade New', serif;
       text-align: center;
       margin: 0;
-      background: linear-gradient(to bottom, #191970, #2e8b57); /* Dark blue to green */
-      color: #fff8dc; /* Light yellow text */
+      background: linear-gradient(to bottom, #191970, #2e8b57);
+      color: #fff8dc;
       overflow-x: hidden;
     }
-
-    #search-container {
-      margin: 20px auto;
-      max-width: 600px;
+    h1 {
+      margin-top: 20px;
+      font-size: 2em;
+      color: #fff;
     }
-
-    #result-container {
-      border: 2px solid #8fbc8f; /* Light green border */
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 600px;
-      background-color: rgba(0, 0, 0, 0.6); /* Slightly transparent dark */
-      text-align: right;
-      direction: rtl;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    .arabic-text {
-      font-size: 2.5em;
-      line-height: 2;
-      margin-bottom: 10px;
-      color: #98fb98; /* Light green Arabic */
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-    }
-
-    .translation {
-      font-style: italic;
-      margin-bottom: 10px;
-      color: #d2b48c; /* Light brown */
-    }
-
-    .tafsir {
-      border-top: 1px solid #6b8e23; /* Olive border */
-      padding-top: 10px;
-      color: #b8860b; /* Dark goldenrod */
-    }
-
     .pattern {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
+      position: absolute;
+      top: 10px;
+      left: 10px;
     }
-
     .moon {
-      position: absolute;
-      top: 50px;
-      right: -50px;
-      width: 200px;
-      height: 200px;
+      background-color: #fff;
       border-radius: 50%;
-      box-shadow: 20px 0 0 0 #f0e68c, 0 0 20px rgba(255, 255, 255, 0.6); /* Yellow/white glow */
-      background: linear-gradient(to bottom, #ffd700, #daa520); /* Gold gradient */
-      animation: moonRise 10s linear forwards;
+      width: 40px;
+      height: 40px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
     }
-
     .star {
-      position: absolute;
-      top: 150px;
-      left: 20px;
-      font-size: 40px;
-      color: #f0e68c; /* Light yellow */
-      text-shadow: 0 0 10px #f0e68c;
-      animation: starTwinkle 3s linear infinite;
+      font-size: 30px;
+      color: #fff;
     }
-
-    @keyframes moonRise {
-      to {
-        right: 50px;
-      }
+    #search-container {
+      margin-top: 30px;
     }
-
-    @keyframes starTwinkle {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
-
-    input[type="text"] {
-      padding: 8px;
-      border: 1px solid #8fbc8f;
-      border-radius: 4px;
-      background-color: #333;
-      color: #fff8dc;
-    }
-
-    button {
-      padding: 8px 16px;
-      background-color: #b8860b; /* Dark goldenrod */
-      color: #fff8dc;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    }
-
-    #metadata {
-      margin: 20px auto;
+    #search-input {
       padding: 10px;
-      border: 1px solid #6b8e23;
-      background-color: #222;
-      text-align: left;
-      max-width: 600px;
+      font-size: 1.2em;
+      border: 2px solid #fff;
+      border-radius: 5px;
+      background: transparent;
+      color: #fff;
     }
-
+    button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .arabic-text {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+    .translation {
+      margin-top: 10px;
+      font-size: 1.2em;
+    }
+    .tafsir {
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #FFD700;
+    }
     #comment-section {
-      margin: 20px auto;
-      text-align: left;
-      max-width: 600px;
+      margin-top: 30px;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 8px;
     }
-
     #comment-textarea {
-      width: 95%;
+      width: 80%;
       height: 100px;
-      padding: 8px;
-      border: 1px solid #8fbc8f;
-      border-radius: 4px;
-      background-color: #333;
-      color: #fff8dc;
+      font-size: 1.1em;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: transparent;
+      border: 2px solid #fff;
+      color: #fff;
     }
-
+    #comments {
+      margin-top: 20px;
+    }
+    .comment {
+      background-color: #4CAF50;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      color: #fff;
+    }
     #comment-page {
       display: none;
-      margin: 20px auto;
-      max-width: 600px;
-      text-align: left;
+      margin-top: 20px;
     }
-
-    #comment-page h3 {
-      text-align: center;
+    #history-list {
+      margin-top: 20px;
+      font-size: 1.1em;
     }
-
-    #comments-button {
-      margin-bottom: 20px;
-    }
-
-    .comment {
-      border-bottom: 1px solid #6b8e23;
-      padding: 5px 0;
+    #history-list li {
+      background: #333;
+      color: #fff;
+      padding: 10px;
       margin-bottom: 5px;
-    }
-
-    .comment-time {
-      font-size: 0.8em;
-      color: #a9a9a9;
+      border-radius: 5px;
     }
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -168,18 +118,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <div class="pattern">
     <div class="moon"></div>
     <div class="star">★</div>
   </div>
+
   <h1>Quran Verse Search</h1>
+
   <div id="search-container">
     <input type="text" id="search-input" placeholder="Enter verse or surah (e.g., 3:3, 2)">
     <button onclick="searchVerse()">Search</button>
   </div>
 
   <div id="result-container"></div>
-
   <div id="metadata"></div>
 
   <div id="comment-section">
@@ -198,7 +150,140 @@
   </div>
 
   <script>
-    // ... (Your JavaScript remains the same) ...
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+    // Function to search for verses or surahs
+    async function searchVerse() {
+      const input = document.getElementById('search-input').value;
+      const resultContainer = document.getElementById('result-container');
+      const metadataContainer = document.getElementById('metadata');
+      resultContainer.innerHTML = 'Loading...';
+      metadataContainer.innerHTML = '';
+
+      try {
+        let verseApiUrl = `https://api.alquran.cloud/v1/ayah/`;
+        let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/`;
+
+        // Check if input is a verse (e.g., 2:255)
+        if (/^\d+:\d+$/.test(input)) {
+          const verseResponse = await fetch(verseApiUrl + input);
+          const verseData = await verseResponse.json();
+
+          if (verseData.data) {
+            let verseHtml = "";
+            let arabicText = verseData.data.text;
+            let translationText = verseData.data.translation;
+
+            // Highlight search term in both Arabic and translation
+            arabicText = arabicText.replace(new RegExp(input, 'gi'), '<span class="highlight">$&</span>');
+            translationText = translationText.replace(new RegExp(input, 'gi'), '<span class="highlight">$&</span>');
+
+            verseHtml += `<div class="arabic-text">${arabicText}</div>`;
+            verseHtml += `<div class="translation">${translationText}</div>`;
+            verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>`;
+
+            const tafsirResponse = await fetch(tafsirApiUrl + input + "?language=en&words=true");
+            const tafsirData = await tafsirResponse.json();
+
+            if (tafsirData.verse && tafsirData.verse.words) {
+              let tafsirSummary = "";
+              tafsirData.verse.words.forEach(word => {
+                if (word.translation) {
+                  tafsirSummary += word.translation.text + " ";
+                }
+              });
+              verseHtml += `<p>${tafsirSummary}</p>`;
+            }
+
+            verseHtml += `<a href="https://quran.com/${input}" target="_blank">Read Full Tafsir on Quran.com</a>`;
+            resultContainer.innerHTML = verseHtml;
+
+            // Update search history
+            searchHistory.push(input);
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+          } else {
+            resultContainer.innerHTML = "Verse not found.";
+          }
+        } else if (/^\d+$/.test(input)) {
+          // Handle Surah search
+          const surahResponse = await fetch(`https://api.alquran.cloud/v1/surah/${input}`);
+          const surahData = await surahResponse.json();
+
+          if (surahData.data && surahData.data.ayahs) {
+            let surahHtml = '';
+            surahData.data.ayahs.forEach(ayah => {
+              let arabicText = ayah.text;
+              let translationText = ayah.translation;
+
+              // Highlight search term
+              arabicText = arabicText.replace(new RegExp(input, 'gi'), '<span class="highlight">$&</span>');
+              translationText = translationText.replace(new RegExp(input, 'gi'), '<span class="highlight">$&</span>');
+
+              surahHtml += `<div class="arabic-text">${arabicText}</div>`;
+              surahHtml += `<div class="translation">${translationText}</div>`;
+
+              // Add Tafsir for the first two verses
+              if (ayah.numberInSurah === 1 || ayah.numberInSurah === 2) {
+                let tafsirInput = input + ":" + ayah.numberInSurah;
+                fetch(tafsirApiUrl + tafsirInput + "?language=en&words=true").then(response => response.json()).then(tafsirData => {
+                  if (tafsirData.verse && tafsirData.verse.words) {
+                    let tafsirSummary = "";
+                    tafsirData.verse.words.forEach(word => {
+                      if (word.translation) {
+                        tafsirSummary += word.translation.text + " ";
+                      }
+                    });
+                    surahHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br><p>${tafsirSummary}</p></div>`;
+                  }
+                  resultContainer.innerHTML = surahHtml;
+                });
+              }
+
+              surahHtml += `<hr>`;
+            });
+            resultContainer.innerHTML = surahHtml;
+          } else {
+            resultContainer.innerHTML = 'Surah not found.';
+          }
+        } else {
+          resultContainer.innerHTML = 'Please enter a valid verse or surah number (e.g., 3:3 or 2).';
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        resultContainer.innerHTML = 'An error occurred.';
+      }
+    }
+
+    // Function to display the comment section
+    function showComments() {
+      document.getElementById('comment-page').style.display = "block";
+      document.getElementById('result-container').style.display = "none";
+      document.getElementById('comment-section').style.display = "none";
+    }
+
+    // Function to show results after navigating from comments
+    function showResults() {
+      document.getElementById('result-container').style.display = "block";
+      document.getElementById('comment-section').style.display = "block";
+      document.getElementById('comment-page').style.display = "none";
+    }
+
+    // Add a new comment
+    function addComment() {
+      const commentText = document.getElementById('comment-textarea').value;
+      if (commentText.trim() === "") return;
+
+      const commentsDiv = document.getElementById('comments');
+      const commentPageDiv = document.getElementById('comment-page-comments');
+      const newCommentDiv = document.createElement('div');
+      newCommentDiv.classList.add('comment');
+      const time = new Date().toLocaleTimeString();
+      newCommentDiv.innerHTML = `<p>${commentText}</p><span class="comment-time">${time}</span>`;
+      commentsDiv.appendChild(newCommentDiv.cloneNode(true));
+      commentPageDiv.appendChild(newCommentDiv);
+      document.getElementById('comment-textarea').value = ''; // Clear textarea
+    }
   </script>
+
 </body>
 </html>
