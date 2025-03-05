@@ -4,10 +4,11 @@
   <title>Quran Verse Search</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Scheherazade New', serif; /* Or another suitable Arabic font */
       text-align: center;
       margin: 20px;
-      background-color: #f4f4f4;
+      background-color: #f0f8f0; /* Light green background */
+      color: #333;
     }
 
     #search-container {
@@ -15,31 +16,34 @@
     }
 
     #result-container {
-      border: 1px solid #ddd;
+      border: 2px solid #a5d6a7; /* Light green border */
       padding: 20px;
       margin-top: 20px;
       background-color: white;
-      text-align: left;
+      text-align: right; /* Align text to right for Arabic */
+      direction: rtl;
     }
 
     .arabic-text {
-      font-size: 2em;
+      font-size: 2.5em; /* Larger Arabic text */
       line-height: 2;
-      direction: rtl; /* Right-to-left for Arabic */
       margin-bottom: 10px;
+      color: #2e7d32; /* Darker green for Arabic */
     }
 
     .translation {
       font-style: italic;
       margin-bottom: 10px;
+      color: #555;
     }
 
     .tafsir {
-      border-top: 1px solid #eee;
+      border-top: 1px solid #c8e6c9; /* Lighter green border */
       padding-top: 10px;
+      color: #444;
     }
 
-    /* Islamic Geometric Pattern (Simplified) */
+    /* Ramadan-inspired Art Style */
     .pattern {
       position: fixed;
       top: 0;
@@ -47,25 +51,29 @@
       width: 100%;
       height: 100%;
       z-index: -1;
-      background-image: repeating-linear-gradient(45deg, #e0f2f7, #e0f2f7 10px, #b2ebf2 10px, #b2ebf2 20px);
-      opacity: 0.3; /* Subtle background */
+      background-image:
+        radial-gradient(circle, rgba(220, 240, 220, 0.5), transparent 60%), /* Soft green radial gradient */
+        repeating-linear-gradient(135deg, rgba(245, 245, 245, 0.3), rgba(245, 245, 245, 0.3) 10px, rgba(230, 230, 230, 0.3) 10px, rgba(230, 230, 230, 0.3) 20px); /* Subtle white pattern */
     }
 
     input[type="text"] {
       padding: 8px;
-      border: 1px solid #ccc;
+      border: 1px solid #a5d6a7;
       border-radius: 4px;
     }
 
     button {
       padding: 8px 16px;
-      background-color: #03a9f4;
+      background-color: #4caf50; /* Green button */
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
   </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="pattern"></div>
@@ -84,67 +92,47 @@
       resultContainer.innerHTML = 'Loading...';
 
       try {
-        let apiUrl = `https://api.alquran.cloud/v1/search/${encodeURIComponent(input)}/all/en.asad`;
-        let surahApiUrl = `https://api.alquran.cloud/v1/surah/`;
         let verseApiUrl = `https://api.alquran.cloud/v1/ayah/`;
         let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/`;
-        let data;
 
-        // Check if the input is a surah number or a verse range
-        if (/^\d+$/.test(input) || /^\d+:\d+-\d+$/.test(input) || /^\d+:\d+$/.test(input)) {
-          if(/^\d+$/.test(input)){
-            surahApiUrl = surahApiUrl + input;
-            const surahResponse = await fetch(surahApiUrl);
-            const surahData = await surahResponse.json();
-            if (surahData.data && surahData.data.ayahs) {
-              let surahHtml = '';
-              surahData.data.ayahs.forEach(ayah => {
-                surahHtml += `<div class="arabic-text">${ayah.text}</div>`;
-                surahHtml += `<div class="translation">${ayah.translation}</div>`;
-                surahHtml += `<hr>`;
+        if (/^\d+:\d+$/.test(input)) { // Check if it's a verse number
+          const verseResponse = await fetch(verseApiUrl + input);
+          const verseData = await verseResponse.json();
+          if (verseData.data) {
+            let verseHtml = "";
+            verseHtml += `<div class="arabic-text">${verseData.data.text}</div>`;
+            verseHtml += `<div class="translation">${verseData.data.translation}</div>`;
+
+            const tafsirResponse = await fetch(tafsirApiUrl + input + "?language=en&words=true");
+            const tafsirData = await tafsirResponse.json();
+            if (tafsirData.verse && tafsirData.verse.words) {
+              verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>`;
+              tafsirData.verse.words.forEach(word => {
+                if (word.translation) {
+                  verseHtml += word.translation.text + " ";
+                }
               });
-              resultContainer.innerHTML = surahHtml;
-            } else {
-              resultContainer.innerHTML = 'Surah not found.';
+              verseHtml += `</div>`;
             }
+            resultContainer.innerHTML = verseHtml;
           } else {
-            const verseResponse = await fetch(verseApiUrl + input + "/en.asad");
-            const verseData = await verseResponse.json();
-            if(verseData.data){
-              let verseHtml = "";
-              verseHtml += `<div class="arabic-text">${verseData.data.text}</div>`;
-              verseHtml += `<div class="translation">${verseData.data.translation}</div>`;
-
-              const tafsirResponse = await fetch(tafsirApiUrl + input + "?language=en&words=true");
-              const tafsirData = await tafsirResponse.json();
-              if(tafsirData.verse && tafsirData.verse.words){
-                verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>`;
-                tafsirData.verse.words.forEach(word => {
-                  if(word.translation){
-                    verseHtml += word.translation.text + " ";
-                  }
-                });
-                verseHtml += `</div>`;
-              }
-              resultContainer.innerHTML = verseHtml;
-            } else {
-              resultContainer.innerHTML = "Verse not found.";
-            }
+            resultContainer.innerHTML = "Verse not found.";
+          }
+        } else if (/^\d+$/.test(input)) { // Check if it's a surah number
+          const surahResponse = await fetch(`https://api.alquran.cloud/v1/surah/${input}`);
+          const surahData = await surahResponse.json();
+          if (surahData.data && surahData.data.ayahs) {
+            let surahHtml = '';
+            surahData.data.ayahs.forEach(ayah => {
+              surahHtml += `<div class="arabic-text">${ayah.text}</div>`;
+              surahHtml += `<div class="translation">${ayah.translation}</div><hr>`;
+            });
+            resultContainer.innerHTML = surahHtml;
+          } else {
+            resultContainer.innerHTML = 'Surah not found.';
           }
         } else {
-          const response = await fetch(apiUrl);
-          data = await response.json();
-          if (data.data && data.data.matches && data.data.matches.length > 0) {
-            let matchesHtml = '';
-            data.data.matches.forEach(match => {
-              matchesHtml += `<div class="arabic-text">${match.text}</div>`;
-              matchesHtml += `<div class="translation">${match.translation}</div>`;
-              matchesHtml += `<hr>`;
-            });
-            resultContainer.innerHTML = matchesHtml;
-          } else {
-            resultContainer.innerHTML = 'No results found.';
-          }
+            resultContainer.innerHTML = 'Please enter a valid verse or surah number (e.g., 1:1 or 2).';
         }
 
       } catch (error) {
