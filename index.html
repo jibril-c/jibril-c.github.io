@@ -7,20 +7,160 @@
       font-family: 'Scheherazade New', serif;
       text-align: center;
       margin: 0;
-      background: linear-gradient(to bottom, #121212, #333333);
-      color: #ffffff;
+      background: linear-gradient(to bottom, #191970, #2e8b57); /* Dark blue to green */
+      color: #fff8dc; /* Light yellow text */
       overflow-x: hidden;
     }
-    /* ... (Your CSS styles remain the same) ... */
+
+    #search-container {
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    #result-container {
+      border: 2px solid #8fbc8f; /* Light green border */
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      background-color: rgba(0, 0, 0, 0.6); /* Slightly transparent dark */
+      text-align: right;
+      direction: rtl;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .arabic-text {
+      font-size: 2.5em;
+      line-height: 2;
+      margin-bottom: 10px;
+      color: #98fb98; /* Light green Arabic */
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .translation {
+      font-style: italic;
+      margin-bottom: 10px;
+      color: #d2b48c; /* Light brown */
+    }
+
+    .tafsir {
+      border-top: 1px solid #6b8e23; /* Olive border */
+      padding-top: 10px;
+      color: #b8860b; /* Dark goldenrod */
+    }
+
+    .pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .moon {
+      position: absolute;
+      top: 50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      box-shadow: 20px 0 0 0 #f0e68c, 0 0 20px rgba(255, 255, 255, 0.6); /* Yellow/white glow */
+      background: linear-gradient(to bottom, #ffd700, #daa520); /* Gold gradient */
+      animation: moonRise 10s linear forwards;
+    }
+
+    .star {
+      position: absolute;
+      top: 150px;
+      left: 20px;
+      font-size: 40px;
+      color: #f0e68c; /* Light yellow */
+      text-shadow: 0 0 10px #f0e68c;
+      animation: starTwinkle 3s linear infinite;
+    }
+
+    @keyframes moonRise {
+      to {
+        right: 50px;
+      }
+    }
+
+    @keyframes starTwinkle {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      border: 1px solid #8fbc8f;
+      border-radius: 4px;
+      background-color: #333;
+      color: #fff8dc;
+    }
+
+    button {
+      padding: 8px 16px;
+      background-color: #b8860b; /* Dark goldenrod */
+      color: #fff8dc;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    #metadata {
+      margin: 20px auto;
+      padding: 10px;
+      border: 1px solid #6b8e23;
+      background-color: #222;
+      text-align: left;
+      max-width: 600px;
+    }
+
+    #comment-section {
+      margin: 20px auto;
+      text-align: left;
+      max-width: 600px;
+    }
+
+    #comment-textarea {
+      width: 95%;
+      height: 100px;
+      padding: 8px;
+      border: 1px solid #8fbc8f;
+      border-radius: 4px;
+      background-color: #333;
+      color: #fff8dc;
+    }
+
+    #comment-page {
+      display: none;
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    #comment-page h3 {
+      text-align: center;
+    }
+
+    #comments-button {
+      margin-bottom: 20px;
+    }
+
     .comment {
-      border-bottom: 1px solid #555;
+      border-bottom: 1px solid #6b8e23;
       padding: 5px 0;
       margin-bottom: 5px;
     }
 
     .comment-time {
       font-size: 0.8em;
-      color: #888;
+      color: #a9a9a9;
     }
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,122 +198,7 @@
   </div>
 
   <script>
-    async function searchVerse() {
-      const input = document.getElementById('search-input').value;
-      const resultContainer = document.getElementById('result-container');
-      const metadataContainer = document.getElementById('metadata');
-      resultContainer.innerHTML = 'Loading...';
-      metadataContainer.innerHTML = '';
-
-      try {
-        let verseApiUrl = `https://api.alquran.cloud/v1/ayah/`;
-        let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/`;
-
-        if (/^\d+:\d+$/.test(input)) {
-          const verseResponse = await fetch(verseApiUrl + input);
-          const verseData = await verseResponse.json();
-
-          if (verseData.data) {
-            let verseHtml = "";
-            verseHtml += `<div class="arabic-text">${verseData.data.text}</div>`;
-            verseHtml += `<div class="translation">${verseData.data.translation}</div>`;
-            verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>`;
-
-            const tafsirResponse = await fetch(tafsirApiUrl + input + "?language=en&words=true");
-            const tafsirData = await tafsirResponse.json();
-            if(tafsirData.verse && tafsirData.verse.words){
-              let tafsirSummary = "";
-              tafsirData.verse.words.forEach(word => {
-                if(word.translation){
-                  tafsirSummary += word.translation.text + " ";
-                }
-              });
-              verseHtml += `<p>${tafsirSummary}</p>`;
-            }
-
-            verseHtml += `<a href="https://quran.com/${input}" target="_blank">Read Full Tafsir on Quran.com</a>`;
-            verseHtml += `</div>`;
-            resultContainer.innerHTML = verseHtml;
-
-            // Metadata (Example)
-            metadataContainer.innerHTML = `
-              <h3>Common Searches</h3>
-              <p><strong>Themes:</strong> Guidance, Mercy, Prayer</p>
-              <p><strong>Related Verses:</strong> 2:255, 3:190-191</p>
-              <p><strong>Key Words:</strong> Allah, Rahman, Rahim</p>
-            `;
-          } else {
-            resultContainer.innerHTML = "Verse not found.";
-          }
-        } else if (/^\d+$/.test(input)) {
-          const surahResponse = await fetch(`https://api.alquran.cloud/v1/surah/${input}`);
-          const surahData = await surahResponse.json();
-          if (surahData.data && surahData.data.ayahs) {
-            let surahHtml = '';
-            surahData.data.ayahs.forEach(ayah => {
-              surahHtml += `<div class="arabic-text">${ayah.text}</div>`;
-              surahHtml += `<div class="translation">${ayah.translation}</div>`;
-
-              if(ayah.numberInSurah === 1 || ayah.numberInSurah === 2){
-                let tafsirInput = input + ":" + ayah.numberInSurah;
-                fetch(tafsirApiUrl + tafsirInput + "?language=en&words=true").then(response => response.json()).then(tafsirData => {
-                  if(tafsirData.verse && tafsirData.verse.words){
-                    let tafsirSummary = "";
-                    tafsirData.verse.words.forEach(word => {
-                      if(word.translation){
-                        tafsirSummary += word.translation.text + " ";
-                      }
-                    });
-                    surahHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br><p>${tafsirSummary}</p></div>`;
-                  }
-                  resultContainer.innerHTML = surahHtml;
-                });
-              }
-              surahHtml += `<hr>`;
-            });
-            resultContainer.innerHTML = surahHtml;
-            metadataContainer.innerHTML = `<h3>Surah ${surahData.data.englishName}</h3><p>Main Themes: ... </p><a href="https://quran.com/${input}" target="_blank">Read Full Tafsir on Quran.com</a>`;
-          } else {
-            resultContainer.innerHTML = 'Surah not found.';
-          }
-        } else {
-          resultContainer.innerHTML = 'Please enter a valid verse or surah number (e.g., 3:3 or 2).';
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        resultContainer.innerHTML = 'An error occurred.';
-      }
-    }
-
-    function addComment() {
-      const commentText = document.getElementById('comment-textarea').value;
-      if (commentText.trim() === "") return;
-      const commentsDiv = document.getElementById('comments');
-      const commentPageDiv = document.getElementById('comment-page-comments');
-      const newCommentDiv = document.createElement('div');
-      newCommentDiv.classList.add('comment');
-      const time = new Date().toLocaleTimeString();
-      newCommentDiv.innerHTML = `<p>${commentText}</p><span class="comment-time">${time}</span>`;
-      commentsDiv.appendChild(newCommentDiv.cloneNode(true));
-      commentPageDiv.appendChild(newCommentDiv);
-      document.getElementById('comment-textarea').value = '';
-    }
-
-    function showComments() {
-      document.getElementById('result-container').style.display = 'none';
-      document.getElementById('metadata').style.display = 'none';
-      document.getElementById('comment-section').style.display = 'none';
-      document.getElementById('comments-button').style.display = 'none';
-      document.getElementById('comment-page').style.display = 'block';
-    }
-
-    function showResults() {
-      document.getElementById('result-container').style.display = 'block';
-      document.getElementById('metadata').style.display = 'block';
-      document.getElementById('comment-section').style.display = 'block';
-      document.getElementById('comments-button').style.display = 'block';
-      document.getElementById('comment-page').style.display = 'none';
-    }
+    // ... (Your JavaScript remains the same) ...
   </script>
 </body>
 </html>
