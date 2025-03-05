@@ -7,8 +7,8 @@
       font-family: 'Scheherazade New', serif;
       text-align: center;
       margin: 0;
-      background: linear-gradient(to bottom, #e0f2e7, #f8f8f8); /* Gradient background */
-      color: #333;
+      background: linear-gradient(to bottom, #121212, #333333); /* Dark background */
+      color: #ffffff; /* White text */
       overflow-x: hidden;
     }
 
@@ -18,34 +18,34 @@
     }
 
     #result-container {
-      border: 2px solid #a5d6a7;
+      border: 2px solid #555; /* Darker border */
       padding: 20px;
       margin: 20px auto;
       max-width: 600px;
-      background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+      background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark */
       text-align: right;
       direction: rtl;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     }
 
     .arabic-text {
       font-size: 2.5em;
       line-height: 2;
       margin-bottom: 10px;
-      color: #2e7d32;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Text shadow */
+      color: #a5d6a7; /* Light green Arabic */
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     }
 
     .translation {
       font-style: italic;
       margin-bottom: 10px;
-      color: #555;
+      color: #ccc;
     }
 
     .tafsir {
-      border-top: 1px solid #c8e6c9;
+      border-top: 1px solid #555;
       padding-top: 10px;
-      color: #444;
+      color: #bbb;
     }
 
     .pattern {
@@ -64,8 +64,8 @@
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      box-shadow: 20px 0 0 0 white, 0 0 20px rgba(255, 255, 255, 0.7); /* Glow effect */
-      background: linear-gradient(to bottom, #c8e6c9, #a5d6a7); /* Gradient moon */
+      box-shadow: 20px 0 0 0 white, 0 0 20px rgba(255, 255, 255, 0.7);
+      background: linear-gradient(to bottom, #777, #555); /* Darker moon */
       animation: moonRise 10s linear forwards;
     }
 
@@ -75,7 +75,7 @@
       left: 20px;
       font-size: 40px;
       color: white;
-      text-shadow: 0 0 10px white; /* Star glow */
+      text-shadow: 0 0 10px white;
       animation: starTwinkle 3s linear infinite;
     }
 
@@ -96,8 +96,10 @@
 
     input[type="text"] {
       padding: 8px;
-      border: 1px solid #a5d6a7;
+      border: 1px solid #555;
       border-radius: 4px;
+      background-color: #444;
+      color: #fff;
     }
 
     button {
@@ -107,14 +109,14 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Button shadow */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     #metadata {
       margin: 20px auto;
       padding: 10px;
-      border: 1px solid #ddd;
-      background-color: #f9f9f9;
+      border: 1px solid #555;
+      background-color: #222;
       text-align: left;
       max-width: 600px;
     }
@@ -129,8 +131,10 @@
       width: 95%;
       height: 100px;
       padding: 8px;
-      border: 1px solid #a5d6a7;
+      border: 1px solid #555;
       border-radius: 4px;
+      background-color: #444;
+      color: #fff;
     }
 
     #comment-page {
@@ -184,20 +188,25 @@
 
   <script>
     async function searchVerse() {
-      // ... (Your searchVerse() function remains the same) ...
-    }
+      const input = document.getElementById('search-input').value;
+      const resultContainer = document.getElementById('result-container');
+      const metadataContainer = document.getElementById('metadata');
+      resultContainer.innerHTML = 'Loading...';
+      metadataContainer.innerHTML = '';
 
-    function addComment() {
-      // ... (Your addComment() function remains the same) ...
-    }
+      try {
+        let verseApiUrl = `https://api.alquran.cloud/v1/ayah/`;
+        let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/`;
 
-    function showComments() {
-      // ... (Your showComments() function remains the same) ...
-    }
+        if (/^\d+:\d+$/.test(input)) {
+          const verseResponse = await fetch(verseApiUrl + input);
+          const verseData = await verseResponse.json();
 
-    function showResults() {
-      // ... (Your showResults() function remains the same) ...
-    }
-  </script>
-</body>
-</html>
+          if (verseData.data) {
+            let verseHtml = "";
+            verseHtml += `<div class="arabic-text">${verseData.data.text}</div>`;
+            verseHtml += `<div class="translation">${verseData.data.translation}</div>`;
+            verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>`;
+
+            const tafsirResponse = await fetch(tafsirApiUrl + input + "?language=en&words=true");
+            const tafsirData = await
