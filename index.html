@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quran Verse Search</title>
+  <title>Quran Verse Search - Ramadan</title>
+  <meta name="description" content="Quran Verse Search - Search for Quranic verses, view tafsir, and explore Ramadan content.">
+  <meta name="keywords" content="Quran, Ramadan, Tafsir, Quranic Verses, Islamic Search">
+  <meta name="author" content="QuranVerseSearch">
+  <meta property="og:title" content="Quran Verse Search - Ramadan">
+  <meta property="og:description" content="Search and explore Quranic verses, tafsir, and Ramadan topics.">
+  <meta property="og:image" content="https://example.com/quran-image.jpg">
+  <meta property="og:url" content="https://example.com/quran-search">
   <style>
     /* General background and body styles */
     body {
       font-family: 'Scheherazade New', serif;
-      background: linear-gradient(to bottom, #4B0082, #2e8b57); /* Deep purple to green */
+      background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Night sky blue with a warm feel */
       color: #fff8dc;
       margin: 0;
       text-align: center;
       overflow-x: hidden;
     }
 
+    /* Ramadan pattern with moon, lantern, stars */
     .pattern {
       position: absolute;
       top: 10%;
@@ -30,13 +38,24 @@
       background-size: contain;
       border-radius: 50%;
       position: absolute;
-      top: 0;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .lantern {
+      width: 100px;
+      height: 150px;
+      background: url('https://www.w3schools.com/w3images/ramadan-lantern.png') no-repeat center center;
+      background-size: contain;
+      position: absolute;
+      bottom: 10%;
       left: 50%;
       transform: translateX(-50%);
     }
 
     .star {
-      font-size: 30px;
+      font-size: 40px;
       color: gold;
       position: absolute;
       top: 50%;
@@ -47,6 +66,7 @@
     h1 {
       font-size: 3rem;
       margin-top: 20px;
+      color: #f4e1d2;
     }
 
     /* Input and button styling */
@@ -67,8 +87,8 @@
       padding: 10px 20px;
       font-size: 1.2rem;
       margin-left: 10px;
-      background-color: #2e8b57;
-      color: white;
+      background-color: #f4e1d2;
+      color: #333;
       border: none;
       border-radius: 10px;
     }
@@ -152,6 +172,35 @@
       color: #fff8dc;
       text-align: center;
     }
+
+    /* Trending Searches */
+    #trending-container {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
+
+    #trending-container h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    #trending-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #trending-list li {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      cursor: pointer;
+      color: #f4e1d2;
+    }
+
+    #trending-list li:hover {
+      color: gold;
+    }
   </style>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,13 +211,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
 </head>
 <body>
-  <!-- Ramadan vibe pattern -->
+  <!-- Ramadan pattern with moon, lantern -->
   <div class="pattern">
     <div class="moon"></div>
+    <div class="lantern"></div>
     <div class="star">★</div>
   </div>
 
-  <h1>Quran Verse Search</h1>
+  <h1>Quran Verse Search - Ramadan</h1>
 
   <!-- Login/Signup section -->
   <div id="auth-section">
@@ -204,6 +254,14 @@
 
   <button id="comment-toggle" class="comment-button" onclick="toggleComments()">Show Comments</button>
 
+  <!-- Trending Searches Section -->
+  <div id="trending-container">
+    <h3>Trending Searches</h3>
+    <ul id="trending-list">
+      <!-- Trending searches will be added dynamically -->
+    </ul>
+  </div>
+
   <footer>
     <p>Developed with love for the Quran</p>
   </footer>
@@ -211,6 +269,7 @@
   <script>
     const encryptionKey = "yourSecretKey"; // Keep this key secure!
     let searchHistory = JSON.parse(decrypt(localStorage.getItem('searchHistory'))) || [];
+    let trendingSearches = JSON.parse(localStorage.getItem('trendingSearches')) || [];
 
     // Encrypt and Decrypt functions
     function encrypt(data) {
@@ -235,6 +294,22 @@
 
       // Encrypt and store history in localStorage
       localStorage.setItem('searchHistory', encrypt(searchHistory));
+    }
+
+    // Update trending searches
+    function updateTrendingSearches(query) {
+      if (!trendingSearches.includes(query)) {
+        trendingSearches.push(query);
+        localStorage.setItem('trendingSearches', JSON.stringify(trendingSearches));
+      }
+
+      const trendingList = document.getElementById('trending-list');
+      trendingList.innerHTML = '';
+      trendingSearches.slice(-5).reverse().forEach(topic => {
+        const listItem = document.createElement('li');
+        listItem.textContent = topic;
+        trendingList.appendChild(listItem);
+      });
     }
 
     // Search for a verse
@@ -265,72 +340,77 @@
                   resultContainer.innerHTML = verseHtml;
                   searchHistory.push(input);
                   updateSearchHistory();
+                  updateTrendingSearches(input); // Update trending searches
                 });
             } else {
               resultContainer.innerHTML = 'Verse not found.';
             }
           });
       } catch (error) {
-        console.error('Error fetching data:', error);
         resultContainer.innerHTML = 'An error occurred.';
       }
     }
 
-    // Toggle comments visibility (like YouTube)
-    function toggleComments() {
-      const commentSection = document.getElementById('comment-section');
-      commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // Add a comment
+    // Add a comment function
     function addComment() {
       const commentText = document.getElementById('comment-textarea').value;
       if (commentText.trim() === "") return;
-      const commentsDiv = document.getElementById('comments');
-      const newCommentDiv = document.createElement('div');
-      newCommentDiv.classList.add('comment');
+      const commentDiv = document.createElement('div');
+      commentDiv.classList.add('comment');
       const time = new Date().toLocaleTimeString();
-      newCommentDiv.innerHTML = `<p>${commentText}</p><span class="comment-time">${time}</span>`;
-      commentsDiv.appendChild(newCommentDiv);
-
-      document.getElementById('comment-textarea').value = ''; // Clear textarea
+      commentDiv.innerHTML = `<p>${commentText}</p><span class="comment-time">${time}</span>`;
+      document.getElementById('comments').appendChild(commentDiv);
     }
 
-    // Email validation for Gmail
-    function validateEmail(email) {
-      const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-      return regex.test(email);
+    // Show/hide comments function
+    function toggleComments() {
+      const commentsDiv = document.getElementById('comment-section');
+      commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
     }
 
-    // Login and signup functions (basic client-side validation)
+    // Login function
     function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      if (!validateEmail(email)) {
-        alert("Please enter a valid Gmail address.");
+      // Basic Gmail validation
+      if (!email.includes('@gmail.com')) {
+        alert('Please enter a valid Gmail address.');
         return;
       }
 
-      alert(`Login successful for ${email}`);
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long.');
+        return;
+      }
+
+      alert('Logged in successfully!');
     }
 
+    // Signup function
     function signup() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      if (!validateEmail(email)) {
-        alert("Please enter a valid Gmail address.");
+      // Basic Gmail validation
+      if (!email.includes('@gmail.com')) {
+        alert('Please enter a valid Gmail address.');
         return;
       }
 
-      alert(`Sign up successful for ${email}`);
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long.');
+        return;
+      }
+
+      alert('Account created successfully!');
     }
 
-    // Update history visibility on page load
-    updateSearchHistory();
+    // Initialize trending searches on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateTrendingSearches(); // Populate trending searches on load
+    });
   </script>
 </body>
 </html>
-
 
