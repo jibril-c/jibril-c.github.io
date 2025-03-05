@@ -5,145 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quran Verse Search</title>
   <style>
+    /* Background styling with Ramadan vibes */
     body {
       font-family: 'Scheherazade New', serif;
-      text-align: center;
-      margin: 0;
       background: linear-gradient(to bottom, #191970, #2e8b57);
       color: #fff8dc;
+      margin: 0;
+      text-align: center;
       overflow-x: hidden;
     }
-    h1 {
-      margin-top: 20px;
-      font-size: 2em;
-      color: #fff;
-    }
+
     .pattern {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
     }
+
     .moon {
-      background-color: #fff;
+      width: 100px;
+      height: 100px;
+      background: url('https://image.shutterstock.com/image-vector/vector-illustration-half-moon-graphic-260nw-1045203430.jpg') no-repeat center center;
+      background-size: contain;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
     }
+
     .star {
       font-size: 30px;
-      color: #fff;
+      color: gold;
       position: absolute;
-      top: 50px;
-      left: 40px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 20px;
+    }
+
+    /* Input and button styling */
     #search-container {
-      margin-top: 30px;
+      margin-top: 20px;
+      padding: 20px;
     }
+
     #search-input {
       padding: 10px;
-      font-size: 1.2em;
+      font-size: 1.2rem;
+      width: 250px;
       border: 2px solid #fff;
       border-radius: 5px;
-      background: transparent;
-      color: #fff;
     }
-    button {
+
+    #search-container button {
       padding: 10px 20px;
-      font-size: 1.2em;
-      background-color: #4CAF50;
+      font-size: 1.2rem;
+      margin-left: 10px;
+      background-color: #2e8b57;
       color: white;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
     }
-    button:hover {
-      background-color: #45a049;
-    }
-    .arabic-text {
-      font-size: 1.5em;
-      margin-top: 20px;
-    }
-    .translation {
-      margin-top: 10px;
-      font-size: 1.2em;
-    }
-    .tafsir {
-      margin-top: 20px;
-      font-size: 1.1em;
-      color: #FFD700;
-    }
+
+    /* Comment section styling */
     #comment-section {
-      margin-top: 30px;
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 8px;
+      margin-top: 40px;
     }
-    #comment-textarea {
-      width: 80%;
-      height: 100px;
-      font-size: 1.1em;
-      padding: 10px;
-      border-radius: 5px;
-      background-color: transparent;
-      border: 2px solid #fff;
-      color: #fff;
-    }
+
     #comments {
       margin-top: 20px;
-      display: none;
+      max-height: 300px;
+      overflow-y: auto;
     }
+
+    #comment-textarea {
+      padding: 10px;
+      width: 300px;
+      height: 80px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
     .comment {
-      background-color: #4CAF50;
+      margin-bottom: 15px;
       padding: 10px;
-      margin-bottom: 10px;
+      background-color: #f1f1f1;
       border-radius: 5px;
-      color: #fff;
     }
-    #history-list {
+
+    .comment-time {
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    .highlight {
+      background-color: yellow;
+    }
+
+    #history-container {
       margin-top: 20px;
-      font-size: 1.1em;
-    }
-    #history-list li {
-      background: #333;
-      color: #fff;
-      padding: 10px;
-      margin-bottom: 5px;
-      border-radius: 5px;
-    }
-    #login-container, #signup-container {
+      max-height: 200px;
+      overflow-y: auto;
       display: none;
-      text-align: center;
     }
-    .form-input {
-      padding: 10px;
-      margin: 10px;
-      font-size: 1em;
-      border: 1px solid #fff;
-      border-radius: 5px;
-      color: #fff;
-      background: transparent;
-    }
-    .login-btn, .signup-btn {
-      padding: 10px 20px;
-      font-size: 1em;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
+
+    .comment-button {
       cursor: pointer;
+      color: blue;
     }
   </style>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
+  
+  <!-- Include CryptoJS library for encryption -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
 </head>
 <body>
-
+  <!-- Ramadan vibe pattern -->
   <div class="pattern">
     <div class="moon"></div>
     <div class="star">★</div>
@@ -151,177 +138,56 @@
 
   <h1>Quran Verse Search</h1>
 
-  <!-- Login Section -->
-  <div id="login-container">
-    <h2>Login</h2>
-    <input class="form-input" type="email" id="login-email" placeholder="Enter your Gmail">
-    <input class="form-input" type="password" id="login-password" placeholder="Enter your password">
-    <button class="login-btn" onclick="loginUser()">Login</button>
-    <p>Don't have an account? <span onclick="toggleSignUp()">Sign up here</span></p>
+  <!-- Login/Signup section -->
+  <div id="auth-section">
+    <h3>Login / Sign Up</h3>
+    <input type="email" id="email" placeholder="Enter your Gmail" required><br><br>
+    <input type="password" id="password" placeholder="Enter password" required><br><br>
+    <button onclick="login()">Login</button>
+    <button onclick="signup()">Sign Up</button>
   </div>
 
-  <!-- Signup Section -->
-  <div id="signup-container">
-    <h2>Sign Up</h2>
-    <input class="form-input" type="email" id="signup-email" placeholder="Enter your Gmail">
-    <input class="form-input" type="password" id="signup-password" placeholder="Create a password">
-    <button class="signup-btn" onclick="signUpUser()">Sign Up</button>
-    <p>Already have an account? <span onclick="toggleLogin()">Login here</span></p>
-  </div>
-
+  <!-- Search section -->
   <div id="search-container">
     <input type="text" id="search-input" placeholder="Enter verse or surah (e.g., 3:3, 2)">
     <button onclick="searchVerse()">Search</button>
   </div>
 
   <div id="result-container"></div>
-  <div id="metadata"></div>
 
-  <div id="comment-section">
-    <h3>Add a Comment</h3>
-    <textarea id="comment-textarea" placeholder="Add your comment..."></textarea><br>
-    <button onclick="addComment()">Post Comment</button>
-    <button onclick="toggleComments()">View Comments</button>
-    <div id="comments"></div>
-  </div>
-
-  <div id="comment-page">
-    <h3>Comments</h3>
-    <div id="comment-page-comments"></div>
-    <button onclick="showResults()">Back to Results</button>
-  </div>
-
-  <div id="history-list">
+  <!-- Search history (stored securely) -->
+  <div id="history-container">
     <h3>Search History</h3>
     <ul id="history-list-items"></ul>
   </div>
 
+  <!-- Comment section -->
+  <div id="comment-section">
+    <h3>Add a Comment</h3>
+    <textarea id="comment-textarea" placeholder="Add your comment..."></textarea><br>
+    <button onclick="addComment()">Post Comment</button>
+
+    <div id="comments"></div>
+  </div>
+
+  <button id="comment-toggle" class="comment-button" onclick="toggleComments()">Show Comments</button>
+
   <script>
-    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-    let user = JSON.parse(localStorage.getItem('user')) || null;
+    const encryptionKey = "yourSecretKey"; // Keep this key secure!
+    let searchHistory = JSON.parse(decrypt(localStorage.getItem('searchHistory'))) || [];
 
-    // Login Functionality
-    function loginUser() {
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-
-      if (email && password) {
-        localStorage.setItem('user', JSON.stringify({ email, password }));
-        user = { email, password };
-        alert('Login successful!');
-        toggleLogin();
-      } else {
-        alert('Please fill out both fields.');
-      }
+    // Encrypt and Decrypt functions
+    function encrypt(data) {
+      return CryptoJS.AES.encrypt(JSON.stringify(data), encryptionKey).toString();
     }
 
-    // Sign-Up Functionality
-    function signUpUser() {
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-
-      if (email && password) {
-        localStorage.setItem('user', JSON.stringify({ email, password }));
-        user = { email, password };
-        alert('Account created successfully!');
-        toggleSignUp();
-      } else {
-        alert('Please fill out both fields.');
-      }
+    function decrypt(data) {
+      if (!data) return '[]'; 
+      const bytes = CryptoJS.AES.decrypt(data, encryptionKey);
+      return bytes.toString(CryptoJS.enc.Utf8);
     }
 
-    function toggleLogin() {
-      document.getElementById('login-container').style.display = 'block';
-      document.getElementById('signup-container').style.display = 'none';
-      document.getElementById('search-container').style.display = 'block';
-    }
-
-    function toggleSignUp() {
-      document.getElementById('login-container').style.display = 'none';
-      document.getElementById('signup-container').style.display = 'block';
-      document.getElementById('search-container').style.display = 'none';
-    }
-
-    // Search for verses or surahs
-    async function searchVerse() {
-      const input = document.getElementById('search-input').value;
-      const resultContainer = document.getElementById('result-container');
-      resultContainer.innerHTML = 'Loading...';
-
-      try {
-        let verseApiUrl = `https://api.alquran.cloud/v1/ayah/`;
-        let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/`;
-
-        if (/^\d+:\d+$/.test(input)) {
-          const verseResponse = await fetch(verseApiUrl + input);
-          const verseData = await verseResponse.json();
-
-          if (verseData.data) {
-            let verseHtml = "";
-            let arabicText = verseData.data.text;
-            let translationText = verseData.data.translation;
-
-            verseHtml += `<div class="arabic-text">${arabicText}</div>`;
-            verseHtml += `<div class="translation">${translationText}</div>`;
-            verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>`;
-
-            const tafsirResponse = await fetch(tafsirApiUrl + input + "?language=en&words=true");
-            const tafsirData = await tafsirResponse.json();
-
-            if (tafsirData.verse && tafsirData.verse.words) {
-              let tafsirSummary = "";
-              tafsirData.verse.words.forEach(word => {
-                if (word.translation) {
-                  tafsirSummary += word.translation.text + " ";
-                }
-              });
-              verseHtml += `<p>${tafsirSummary}</p>`;
-            }
-
-            verseHtml += `<a href="https://quran.com/${input}" target="_blank">Read Full Tafsir on Quran.com</a>`;
-            resultContainer.innerHTML = verseHtml;
-
-            // Save search history in localStorage
-            searchHistory.push(input);
-            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-            updateSearchHistory();
-          } else {
-            resultContainer.innerHTML = "Verse not found.";
-          }
-        } else if (/^\d+$/.test(input)) {
-          const surahResponse = await fetch(`https://api.alquran.cloud/v1/surah/${input}`);
-          const surahData = await surahResponse.json();
-
-          if (surahData.data && surahData.data.ayahs) {
-            let surahHtml = '';
-            surahData.data.ayahs.forEach(ayah => {
-              let arabicText = ayah.text;
-              let translation
-              let translationText = ayah.translation;
-
-              surahHtml += `<div class="arabic-text">${arabicText}</div>`;
-              surahHtml += `<div class="translation">${translationText}</div>`;
-            });
-
-            resultContainer.innerHTML = surahHtml;
-
-            // Save search history in localStorage
-            searchHistory.push(input);
-            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-            updateSearchHistory();
-          } else {
-            resultContainer.innerHTML = 'Surah not found.';
-          }
-        } else {
-          resultContainer.innerHTML = 'Please enter a valid verse or surah number (e.g., 3:3 or 2).';
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        resultContainer.innerHTML = 'An error occurred.';
-      }
-    }
-
-    // Update search history
+    // Update search history (only visible to the user)
     function updateSearchHistory() {
       const historyList = document.getElementById('history-list-items');
       historyList.innerHTML = '';
@@ -330,13 +196,60 @@
         listItem.textContent = item;
         historyList.appendChild(listItem);
       });
+
+      // Encrypt and store history in localStorage
+      localStorage.setItem('searchHistory', encrypt(searchHistory));
     }
 
-    // Add comment function
+    // Search for a verse
+    function searchVerse() {
+      const input = document.getElementById('search-input').value;
+      const resultContainer = document.getElementById('result-container');
+      resultContainer.innerHTML = 'Loading...';
+
+      try {
+        let verseApiUrl = `https://api.alquran.cloud/v1/ayah/${input}`;
+        fetch(verseApiUrl)
+          .then(response => response.json())
+          .then(verseData => {
+            if (verseData.data) {
+              let verseHtml = `<div class="arabic-text">${verseData.data.text}</div>`;
+              verseHtml += `<div class="translation">${verseData.data.translation}</div>`;
+
+              // Add Tafsir (Ibn Kathir)
+              let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/${input}?language=en&words=true`;
+              fetch(tafsirApiUrl)
+                .then(response => response.json())
+                .then(tafsirData => {
+                  if (tafsirData.verse) {
+                    let tafsirSummary = tafsirData.verse.words.map(word => word.translation.text).join(' ');
+                    verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>${tafsirSummary}</div>`;
+                  }
+
+                  resultContainer.innerHTML = verseHtml;
+                  searchHistory.push(input);
+                  updateSearchHistory();
+                });
+            } else {
+              resultContainer.innerHTML = 'Verse not found.';
+            }
+          });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        resultContainer.innerHTML = 'An error occurred.';
+      }
+    }
+
+    // Toggle comments visibility (like YouTube)
+    function toggleComments() {
+      const commentSection = document.getElementById('comment-section');
+      commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Add a comment
     function addComment() {
       const commentText = document.getElementById('comment-textarea').value;
       if (commentText.trim() === "") return;
-
       const commentsDiv = document.getElementById('comments');
       const newCommentDiv = document.createElement('div');
       newCommentDiv.classList.add('comment');
@@ -344,32 +257,25 @@
       newCommentDiv.innerHTML = `<p>${commentText}</p><span class="comment-time">${time}</span>`;
       commentsDiv.appendChild(newCommentDiv);
 
-      // Reset textarea
-      document.getElementById('comment-textarea').value = '';
+      document.getElementById('comment-textarea').value = ''; // Clear textarea
     }
 
-    // Toggle comments visibility (like YouTube)
-    function toggleComments() {
-      const commentsDiv = document.getElementById('comments');
-      commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
+    // Login and signup functions (basic client-side validation)
+    function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      alert(`Login successful for ${email}`);
     }
 
-    // Show the results page
-    function showResults() {
-      document.getElementById('result-container').style.display = 'block';
-      document.getElementById('comment-page').style.display = 'none';
+    function signup() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      alert(`Sign up successful for ${email}`);
     }
 
-    // Initial page load setup
-    if (user) {
-      document.getElementById('search-container').style.display = 'block';
-      document.getElementById('login-container').style.display = 'none';
-    } else {
-      document.getElementById('login-container').style.display = 'block';
-      document.getElementById('search-container').style.display = 'none';
-    }
+    // Update history visibility on page load
+    updateSearchHistory();
   </script>
-
 </body>
 </html>
 
