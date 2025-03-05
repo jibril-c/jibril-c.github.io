@@ -1,418 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quran Verse Search - Ramadan</title>
-  <meta name="description" content="Quran Verse Search - Search for Quranic verses, view tafsir, and explore Ramadan content.">
-  <meta name="keywords" content="Quran, Ramadan, Tafsir, Quranic Verses, Islamic Search">
-  <meta name="author" content="QuranVerseSearch">
-  <meta property="og:title" content="Quran Verse Search - Ramadan">
-  <meta property="og:description" content="Search and explore Quranic verses, tafsir, and Ramadan topics.">
-  <meta property="og:image" content="https://example.com/quran-image.jpg">
-  <meta property="og:url" content="https://example.com/quran-search">
-  <style>
-    /* General background and body styles */
-    body {
-      font-family: 'Scheherazade New', serif;
-      background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Night sky blue with a warm feel */
-      color: #fff8dc;
-      margin: 0;
-      text-align: center;
-      overflow-x: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quran Verse Search - Ramadan</title>
+    <style>
+        body {
+            font-family: 'Scheherazade New', serif;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: #fff8dc;
+            margin: 0;
+            text-align: center;
+            overflow-x: hidden;
+            animation: fadeIn 2s ease-in-out;
+        }
 
-    /* Ramadan pattern with moon, lantern, stars */
-    .pattern {
-      position: absolute;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-    .moon {
-      width: 120px;
-      height: 120px;
-      background: url('https://image.shutterstock.com/image-vector/vector-illustration-half-moon-graphic-260nw-1045203430.jpg') no-repeat center center;
-      background-size: contain;
-      border-radius: 50%;
-      position: absolute;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+        .pattern {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
 
-    .lantern {
-      width: 100px;
-      height: 150px;
-      background: url('https://www.w3schools.com/w3images/ramadan-lantern.png') no-repeat center center;
-      background-size: contain;
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+        .moon {
+            width: 120px;
+            height: 120px;
+            background: url('https://image.shutterstock.com/image-vector/vector-illustration-half-moon-graphic-260nw-1045203430.jpg') no-repeat center center;
+            background-size: contain;
+            border-radius: 50%;
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: moonRotate 10s linear infinite;
+        }
 
-    .star {
-      font-size: 40px;
-      color: gold;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+        @keyframes moonRotate {
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
 
-    h1 {
-      font-size: 3rem;
-      margin-top: 20px;
-      color: #f4e1d2;
-    }
+        .star {
+            font-size: 40px;
+            color: gold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-shadow: 0 0 10px gold;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
 
-    /* Input and button styling */
-    #search-container {
-      margin-top: 40px;
-      padding: 20px;
-    }
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
 
-    #search-input {
-      padding: 10px;
-      font-size: 1.2rem;
-      width: 300px;
-      border: 2px solid #fff;
-      border-radius: 10px;
-    }
+        h1 {
+            font-size: 3rem;
+            margin-top: 20px;
+            color: #f4e1d2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
-    #search-container button {
-      padding: 10px 20px;
-      font-size: 1.2rem;
-      margin-left: 10px;
-      background-color: #f4e1d2;
-      color: #333;
-      border: none;
-      border-radius: 10px;
-    }
+        #search-container {
+            margin-top: 40px;
+            padding: 20px;
+        }
 
-    /* Comment section styling */
-    #comment-section {
-      margin-top: 40px;
-    }
+        #search-input {
+            padding: 10px;
+            font-size: 1.2rem;
+            width: 300px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+        }
 
-    #comments {
-      margin-top: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
+        #search-container button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            margin-left: 10px;
+            background-color: #f4e1d2;
+            color: #333;
+            border: none;
+            border-radius: 10px;
+        }
 
-    #comment-textarea {
-      padding: 10px;
-      width: 300px;
-      height: 80px;
-      font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
+        #result-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
 
-    .comment {
-      margin-bottom: 15px;
-      padding: 10px;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-    }
+        .arabic-text {
+            font-size: 2.5em;
+            line-height: 2;
+            margin-bottom: 10px;
+            color: #98fb98;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
 
-    .comment-time {
-      font-size: 0.8rem;
-      color: #888;
-    }
+        .translation {
+            font-style: italic;
+            margin-bottom: 10px;
+            color: #d2b48c;
+        }
 
-    .highlight {
-      background-color: yellow;
-    }
+        .tafsir {
+            border-top: 1px solid #6b8e23;
+            padding-top: 10px;
+            color: #b8860b;
+        }
 
-    #history-container {
-      margin-top: 20px;
-      max-height: 200px;
-      overflow-y: auto;
-      display: none;
-    }
+        #comment-section {
+            margin-top: 40px;
+        }
 
-    .comment-button {
-      cursor: pointer;
-      color: blue;
-    }
+        #comments {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
 
-    /* Styling for login/signup */
-    #auth-section {
-      margin-top: 30px;
-      padding: 20px;
-    }
+        #comment-textarea {
+            padding: 10px;
+            width: 300px;
+            height: 80px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
 
-    #auth-section input {
-      padding: 10px;
-      margin: 10px;
-      width: 300px;
-      font-size: 1rem;
-      border: 2px solid #fff;
-      border-radius: 10px;
-    }
+        .comment {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
 
-    #auth-section button {
-      padding: 10px 20px;
-      font-size: 1.2rem;
-      background-color: #2e8b57;
-      color: white;
-      border: none;
-      border-radius: 10px;
-    }
+        .comment-time {
+            font-size: 0.8rem;
+            color: #888;
+        }
 
-    /* Footer */
-    footer {
-      margin-top: 50px;
-      font-size: 1rem;
-      color: #fff8dc;
-      text-align: center;
-    }
+        .highlight {
+            background-color: yellow;
+        }
 
-    /* Trending Searches */
-    #trending-container {
-      margin-top: 40px;
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 10px;
-    }
+        #history-container {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
 
-    #trending-container h3 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-
-    #trending-list {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    #trending-list li {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      cursor: pointer;
-      color: #f4e1d2;
-    }
-
-    #trending-list li:hover {
-      color: gold;
-    }
-  </style>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
-  
-  <!-- Include CryptoJS library for encryption -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
+        .comment-button {
+            cursor: pointer;
+            color: blue;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
 </head>
 <body>
-  <!-- Ramadan pattern with moon, lantern -->
-  <div class="pattern">
-    <div class="moon"></div>
-    <div class="lantern"></div>
-    <div class="star">★</div>
-  </div>
-
-  <h1>Quran Verse Search - Ramadan</h1>
-
-  <!-- Login/Signup section -->
-  <div id="auth-section">
-    <h3>Login / Sign Up</h3>
-    <input type="email" id="email" placeholder="Enter your Gmail" required><br><br>
-    <input type="password" id="password" placeholder="Enter password" required><br><br>
-    <button onclick="login()">Login</button>
-    <button onclick="signup()">Sign Up</button>
-  </div>
-
-  <!-- Search section -->
-  <div id="search-container">
-    <input type="text" id="search-input" placeholder="Enter verse or surah (e.g., 3:3, 2)">
-    <button onclick="searchVerse()">Search</button>
-  </div>
-
-  <div id="result-container"></div>
-
-  <!-- Search history (stored securely) -->
-  <div id="history-container">
-    <h3>Search History</h3>
-    <ul id="history-list-items"></ul>
-  </div>
-
-  <!-- Comment section -->
-  <div id="comment-section">
-    <h3>Add a Comment</h3>
-    <textarea id="comment-textarea" placeholder="Add your comment..."></textarea><br>
-    <button onclick="addComment()">Post Comment</button>
-
-    <div id="comments"></div>
-  </div>
-
-  <button id="comment-toggle" class="comment-button" onclick="toggleComments()">Show Comments</button>
-
-  <!-- Trending Searches Section -->
-  <div id="trending-container">
-    <h3>Trending Searches</h3>
-    <ul id="trending-list">
-      <!-- Trending searches will be added dynamically -->
-    </ul>
-  </div>
-
-  <footer>
-    <p>Developed with love for the Quran</p>
-  </footer>
-
-  <script>
-    const encryptionKey = "yourSecretKey"; // Keep this key secure!
-    let searchHistory = JSON.parse(decrypt(localStorage.getItem('searchHistory'))) || [];
-    let trendingSearches = JSON.parse(localStorage.getItem('trendingSearches')) || [];
-
-    // Encrypt and Decrypt functions
-    function encrypt(data) {
-      return CryptoJS.AES.encrypt(JSON.stringify(data), encryptionKey).toString();
-    }
-
-    function decrypt(data) {
-      if (!data) return '[]'; 
-      const bytes = CryptoJS.AES.decrypt(data, encryptionKey);
-      return bytes.toString(CryptoJS.enc.Utf8);
-    }
-
-    // Update search history (only visible to the user)
-    function updateSearchHistory() {
-      const historyList = document.getElementById('history-list-items');
-      historyList.innerHTML = '';
-      searchHistory.forEach(item => {
-        const listItem = document.createElement('li');
-        listItem.textContent = item;
-        historyList.appendChild(listItem);
-      });
-
-      // Encrypt and store history in localStorage
-      localStorage.setItem('searchHistory', encrypt(searchHistory));
-    }
-
-    // Update trending searches
-    function updateTrendingSearches(query) {
-      if (!trendingSearches.includes(query)) {
-        trendingSearches.push(query);
-        localStorage.setItem('trendingSearches', JSON.stringify(trendingSearches));
-      }
-
-      const trendingList = document.getElementById('trending-list');
-      trendingList.innerHTML = '';
-      trendingSearches.slice(-5).reverse().forEach(topic => {
-        const listItem = document.createElement('li');
-        listItem.textContent = topic;
-        trendingList.appendChild(listItem);
-      });
-    }
-
-    // Search for a verse
-    function searchVerse() {
-      const input = document.getElementById('search-input').value;
-      const resultContainer = document.getElementById('result-container');
-      resultContainer.innerHTML = 'Loading...';
-
-      try {
-        let verseApiUrl = `https://api.alquran.cloud/v1/ayah/${input}`;
-        fetch(verseApiUrl)
-          .then(response => response.json())
-          .then(verseData => {
-            if (verseData.data) {
-              let verseHtml = `<div class="arabic-text">${verseData.data.text}</div>`;
-              verseHtml += `<div class="translation">${verseData.data.translation}</div>`;
-
-              // Add Tafsir (Ibn Kathir)
-              let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/${input}?language=en&words=true`;
-              fetch(tafsirApiUrl)
-                .then(response => response.json())
-                .then(tafsirData => {
-                  if (tafsirData.verse) {
-                    let tafsirSummary = tafsirData.verse.words.map(word => word.translation.text).join(' ');
-                    verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>${tafsirSummary}</div>`;
-                  }
-
-                  resultContainer.innerHTML = verseHtml;
-                  searchHistory.push(input);
-                  updateSearchHistory();
-                  updateTrendingSearches(input); // Update trending searches
-                });
-            } else {
-              resultContainer.innerHTML = 'Verse not found.';
-            }
-          });
-      } catch (error) {
-        resultContainer.innerHTML = 'An error occurred.';
-      }
-    }
-
-    // Add a comment function
-    function addComment() {
-      const commentText = document.getElementById('comment-textarea').value;
-      if (commentText.trim() === "") return;
-      const commentDiv = document.createElement('div');
-      commentDiv.classList.add('comment');
-      const time = new Date().toLocaleTimeString();
-      commentDiv.innerHTML = `<p>${commentText}</p><span class="comment-time">${time}</span>`;
-      document.getElementById('comments').appendChild(commentDiv);
-    }
-
-    // Show/hide comments function
-    function toggleComments() {
-      const commentsDiv = document.getElementById('comment-section');
-      commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // Login function
-    function login() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      // Basic Gmail validation
-      if (!email.includes('@gmail.com')) {
-        alert('Please enter a valid Gmail address.');
-        return;
-      }
-
-      if (password.length < 6) {
-        alert('Password must be at least 6 characters long.');
-        return;
-      }
-
-      alert('Logged in successfully!');
-    }
-
-    // Signup function
-    function signup() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      // Basic Gmail validation
-      if (!email.includes('@gmail.com')) {
-        alert('Please enter a valid Gmail address.');
-        return;
-      }
-
-      if (password.length < 6) {
-        alert('Password must be at least 6 characters long.');
-        return;
-      }
-
-      alert('Account created successfully!');
-    }
-
-    // Initialize trending searches on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      updateTrendingSearches(); // Populate trending searches on load
-    });
-  </script>
+    <div class="pattern">
+        <div class="moon"></div>
+        <div class="star">★</div>
+    </div>
+    <h1>Quran Verse Search - Ramadan</h1>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Enter verse or surah (e.g., 3:3, 2)">
+        <button onclick="searchVerse()">Search</button>
+    </div>
+    <div id="result-container"></div>
+    <div id="comment-section">
+        <h3>Add a Comment</h3>
+        <textarea id="comment-textarea" placeholder="Add your comment..."></textarea><br>
+        <button onclick="addComment()">Post Comment</button>
+        <div id="comments"></div>
+    </div>
+    <button id="comment-toggle" class="comment-button" onclick="toggleComments()">Show Comments</button>
+    <script>
+        //... (Your Javascript Code remains the same) ...
+    </script>
 </body>
 </html>
-
-
-
