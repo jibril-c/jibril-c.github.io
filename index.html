@@ -1,48 +1,157 @@
-import sqlite3
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quran Verse Search</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
 
-# Connect to the database
-conn = sqlite3.connect('quran.db')
-cursor = conn.cursor()
+    #search-container {
+      margin-bottom: 20px;
+    }
 
-# --- 1. Add Data ---
-def add_data():
-    with open('arabic.txt', 'r', encoding='utf-8') as arabic_file, \
-         open('translation.txt', 'r', encoding='utf-8') as translation_file:
+    #result-container {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin-top: 20px;
+      background-color: white;
+      text-align: left;
+    }
 
-        for arabic_line, translation_line in zip(arabic_file, translation_file):
-            arabic_parts = arabic_line.strip().split('|')
-            translation_parts = translation_line.strip().split('|')
+    .arabic-text {
+      font-size: 2em;
+      line-height: 2;
+      direction: rtl; /* Right-to-left for Arabic */
+      margin-bottom: 10px;
+    }
 
-            if len(arabic_parts) == 3 and len(translation_parts) == 2:
-                surah_id = arabic_parts[0].strip()
-                ayah_number = arabic_parts[1].strip()
-                arabic_text = arabic_parts[2].strip()
-                translation_text = translation_parts[1].strip()
+    .translation {
+      font-style: italic;
+      margin-bottom: 10px;
+    }
 
-                cursor.execute('''
-                    INSERT INTO Ayahs (surah_id, ayah_number, ayah_text_arabic, ayah_text_english)
-                    VALUES (?, ?, ?, ?)
-                ''', (surah_id, ayah_number, arabic_text, translation_text))
-            else:
-                print(f"Skipping line: {arabic_line.strip()} or {translation_line.strip()}")
+    .tafsir {
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
 
-    conn.commit()
-    print("Data added successfully!")
+    /* Islamic Geometric Pattern (Simplified) */
+    .pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: repeating-linear-gradient(45deg, #e0f2f7, #e0f2f7 10px, #b2ebf2 10px, #b2ebf2 20px);
+      opacity: 0.3; /* Subtle background */
+    }
 
-# --- 2. Read and Display Data ---
-def display_data():
-    cursor.execute('SELECT * FROM Ayahs')
-    rows = cursor.fetchall()
+    input[type="text"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
 
-    for row in rows:
-        surah_id, ayah_number, arabic_text, translation_text = row
-        print(f"Surah: {surah_id}, Ayah: {ayah_number}")
-        print(f"Arabic: {arabic_text}")
-        print(f"Translation: {translation_text}\n")
+    button {
+      padding: 8px 16px;
+      background-color: #03a9f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="pattern"></div>
+  <h1>Quran Verse Search</h1>
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="Enter verse or surah (e.g., 1:1, 2, or 2:1-5)">
+    <button onclick="searchVerse()">Search</button>
+  </div>
 
-# --- Main ---
-add_data()  # Add data to the database
-display_data()  # Read and display data
+  <div id="result-container"></div>
 
-# Close the connection
-conn.close()
+  <script>
+    async function searchVerse() {
+      const input = document.getElementById('search-input').value;
+      const resultContainer = document.getElementById('result-container');
+      resultContainer.innerHTML = 'Loading...';
+
+      try {
+        let apiUrl = `https://api.alquran.cloud/v1/search/${encodeURIComponent(input)}/all/en.asad`;
+        let surahApiUrl = `https://api.alquran.cloud/v1/surah/`;
+        let verseApiUrl = `https://api.alquran.cloud/v1/ayah/`;
+        let tafsirApiUrl = `https://api.quran.com/api/v4/verses/by_key/`;
+        let data;
+
+        // Check if the input is a surah number or a verse range
+        if (/^\d+$/.test(input) || /^\d+:\d+-\d+$/.test(input) || /^\d+:\d+$/.test(input)) {
+          if(/^\d+$/.test(input)){
+            surahApiUrl = surahApiUrl + input;
+            const surahResponse = await fetch(surahApiUrl);
+            const surahData = await surahResponse.json();
+            if (surahData.data && surahData.data.ayahs) {
+              let surahHtml = '';
+              surahData.data.ayahs.forEach(ayah => {
+                surahHtml += `<div class="arabic-text">${ayah.text}</div>`;
+                surahHtml += `<div class="translation">${ayah.translation}</div>`;
+                surahHtml += `<hr>`;
+              });
+              resultContainer.innerHTML = surahHtml;
+            } else {
+              resultContainer.innerHTML = 'Surah not found.';
+            }
+          } else {
+            const verseResponse = await fetch(verseApiUrl + input + "/en.asad");
+            const verseData = await verseResponse.json();
+            if(verseData.data){
+              let verseHtml = "";
+              verseHtml += `<div class="arabic-text">${verseData.data.text}</div>`;
+              verseHtml += `<div class="translation">${verseData.data.translation}</div>`;
+
+              const tafsirResponse = await fetch(tafsirApiUrl + input + "?language=en&words=true");
+              const tafsirData = await tafsirResponse.json();
+              if(tafsirData.verse && tafsirData.verse.words){
+                verseHtml += `<div class="tafsir"><strong>Tafsir (Ibn Kathir):</strong><br>`;
+                tafsirData.verse.words.forEach(word => {
+                  if(word.translation){
+                    verseHtml += word.translation.text + " ";
+                  }
+                });
+                verseHtml += `</div>`;
+              }
+              resultContainer.innerHTML = verseHtml;
+            } else {
+              resultContainer.innerHTML = "Verse not found.";
+            }
+          }
+        } else {
+          const response = await fetch(apiUrl);
+          data = await response.json();
+          if (data.data && data.data.matches && data.data.matches.length > 0) {
+            let matchesHtml = '';
+            data.data.matches.forEach(match => {
+              matchesHtml += `<div class="arabic-text">${match.text}</div>`;
+              matchesHtml += `<div class="translation">${match.translation}</div>`;
+              matchesHtml += `<hr>`;
+            });
+            resultContainer.innerHTML = matchesHtml;
+          } else {
+            resultContainer.innerHTML = 'No results found.';
+          }
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        resultContainer.innerHTML = 'An error occurred.';
+      }
+    }
+  </script>
+</body>
+</html>
