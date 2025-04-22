@@ -3,196 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quran Verse Search - Ramadan</title>
+    <title>Imams of the Kaaba</title>
     <style>
         body {
-            font-family: 'Scheherazade New', serif;
-            background: linear-gradient(to bottom, #1e3c72, #2a5298);
-            color: #fff8dc;
+            font-family: Arial, sans-serif;
             margin: 0;
-            text-align: center;
-            overflow-x: hidden;
-            animation: fadeIn 2s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .pattern {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        .moon {
-            width: 120px;
-            height: 120px;
-            background: url('https://image.shutterstock.com/image-vector/vector-illustration-half-moon-graphic-260nw-1045203430.jpg') no-repeat center center;
-            background-size: contain;
-            border-radius: 50%;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            animation: moonRotate 10s linear infinite;
-        }
-
-        @keyframes moonRotate {
-            to { transform: translateX(-50%) rotate(360deg); }
-        }
-
-        .star {
-            font-size: 40px;
-            color: gold;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-shadow: 0 0 10px gold;
-            animation: starTwinkle 2s ease-in-out infinite;
-        }
-
-        @keyframes starTwinkle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-top: 20px;
-            color: #f4e1d2;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        #search-container {
-            margin-top: 40px;
-            padding: 20px;
-        }
-
-        #search-input {
-            padding: 10px;
-            font-size: 1.2rem;
-            width: 300px;
-            border: 2px solid #fff;
-            border-radius: 10px;
-        }
-
-        #search-container button {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            margin-left: 10px;
-            background-color: #f4e1d2;
+            padding: 0;
+            background-color: #f4f4f4;
             color: #333;
-            border: none;
-            border-radius: 10px;
+            line-height: 1.6;
         }
 
-        #result-container {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            max-width: 800px;
-            margin: 20px auto;
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
         }
 
-        .arabic-text {
-            font-size: 2.5em;
-            line-height: 2;
-            margin-bottom: 10px;
-            color: #98fb98;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
         }
 
-        .translation {
-            font-style: italic;
-            margin-bottom: 10px;
-            color: #d2b48c;
+        ul {
+            list-style: none;
+            padding: 0;
         }
 
-        .tafsir {
-            border-top: 1px solid #6b8e23;
-            padding-top: 10px;
-            color: #b8860b;
-        }
-
-        #comment-section {
-            margin-top: 40px;
-        }
-
-        #comments {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        #comment-textarea {
+        ul li {
+            margin: 10px 0;
             padding: 10px;
-            width: 300px;
-            height: 80px;
-            font-size: 1rem;
+            background: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
 
-        .comment {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 5px;
+        .recitation-link {
+            color: #333;
+            text-decoration: none;
         }
 
-        .comment-time {
-            font-size: 0.8rem;
-            color: #888;
+        .recitation-link:hover {
+            text-decoration: underline;
         }
 
-        .highlight {
-            background-color: yellow;
-        }
-
-        #history-container {
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
             margin-top: 20px;
-            max-height: 200px;
-            overflow-y: auto;
-            display: none;
         }
 
-        .comment-button {
-            cursor: pointer;
-            color: blue;
+        .contact-us {
+            margin-top: 20px;
+        }
+
+        .contact-us a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .contact-us a:hover {
+            text-decoration: underline;
         }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
 </head>
 <body>
-    <div class="pattern">
-        <div class="moon"></div>
-        <div class="star">★</div>
+    <header>
+        <h1>Imams of the Kaaba and Their Recitations</h1>
+    </header>
+
+    <div class="container">
+        <section>
+            <h2>List of Imams</h2>
+            <ul>
+                <li>
+                    Sheikh Abdul Rahman Al-Sudais 
+                    - <a href="https://youtube.com" class="recitation-link" target="_blank">Listen to Recitation</a>
+                </li>
+                <li>
+                    Sheikh Saud Al-Shuraim 
+                    - <a href="https://youtube.com" class="recitation-link" target="_blank">Listen to Recitation</a>
+                </li>
+                <li>
+                    Sheikh Maher Al-Muaiqly 
+                    - <a href="https://youtube.com" class="recitation-link" target="_blank">Listen to Recitation</a>
+                </li>
+                <li>
+                    Sheikh Abdullah Awad Al-Juhany 
+                    - <a href="https://youtube.com" class="recitation-link" target="_blank">Listen to Recitation</a>
+                </li>
+                <!-- Add more Imams as needed -->
+            </ul>
+        </section>
+
+        <section class="contact-us">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or suggestions, feel free to reach out on Instagram: 
+                <a href="https://instagram.com/zubei_z" target="_blank">@zubei_z</a>
+            </p>
+        </section>
     </div>
-    <h1>Quran Verse Search - Ramadan</h1>
-    <div id="search-container">
-        <input type="text" id="search-input" placeholder="Enter verse or surah (e.g., 3:3, 2)">
-        <button onclick="searchVerse()">Search</button>
-    </div>
-    <div id="result-container"></div>
-    <div id="comment-section">
-        <h3>Add a Comment</h3>
-        <textarea id="comment-textarea" placeholder="Add your comment..."></textarea><br>
-        <button onclick="addComment()">Post Comment</button>
-        <div id="comments"></div>
-    </div>
-    <button id="comment-toggle" class="comment-button" onclick="toggleComments()">Show Comments</button>
-    <script>
-        //... (Your Javascript Code remains the same) ...
-    </script>
+
+    <footer>
+        <p>&copy; 2025 Imams of the Kaaba. All rights reserved.</p>
+    </footer>
 </body>
 </html>
