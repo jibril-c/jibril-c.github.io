@@ -1,0 +1,37 @@
+name: Update Documentation
+
+on:
+  push:
+    branches: [main] # Or your main development branch
+    paths:
+      - 'docs/**'
+      - '**/src/**' # Or wherever your code that needs documenting resides
+      - '**/package.json' # If your doc generation depends on dependencies
+
+jobs:
+  build_and_deploy_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python # Or your documentation tool's dependency
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies for docs
+        run: |
+          cd docs
+          pip install -r requirements.txt # Or your doc dependencies
+
+      - name: Generate documentation
+        run: |
+          cd docs
+          make html # Or your documentation build command
+
+      - name: Deploy documentation to GitHub Pages # Example deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_dir: ./docs/_build/html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
